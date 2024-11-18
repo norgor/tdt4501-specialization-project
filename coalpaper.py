@@ -159,7 +159,7 @@ def main(args: list[str]):
     n_duplicates = 0
 
     for prefix, func in dbs:
-        for name in glob.glob(f"queries/{prefix}_*"):
+        for name in sorted(glob.glob(f"queries/{prefix}_*")):
             query_id = os.path.splitext(os.path.split(name)[1])[0]
             print(f"Processing {name}...")
             with open(name, "r") as f:
