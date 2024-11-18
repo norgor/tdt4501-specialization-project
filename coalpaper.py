@@ -47,7 +47,7 @@ class RowIdent:
 
 @dataclass
 class Row:
-    CSV_FIELDNAMES = ("EntryID", "ID", "Title", "URL")
+    CSV_FIELDNAMES = ("EntryID", "ID", "Title", "URL", "YEAR")
     CANONTITLE_REMOVECHARS = re.compile("[^a-zA-Z0-9]")
 
     query_id: str
@@ -55,10 +55,11 @@ class Row:
     title: str
     ident: RowIdent
     url: str
+    year: str
 
     def to_csv_dict(self):
         return dict(zip(Row.CSV_FIELDNAMES, (
-            f"{self.query_id}_{self.index+1}", self.ident, self.title, self.url
+            f"{self.query_id}_{self.index+1}", self.ident, self.title, self.url, self.year
         )))
     
     def __canontitle(self) -> str:
@@ -75,19 +76,19 @@ class Row:
 
 def scopus(data: io.TextIOWrapper, query_id: str) -> list[Row]:
     reader = csv.DictReader(data)
-    return [Row(query_id, index, row["Title"], RowIdent(row.get("DOI"), row.get("ISSN"), row.get("ISBN")), row["Link"]) for (index, row) in zip(itertools.count(), reader)]
+    return [Row(query_id, index, row["Title"], RowIdent(row.get("DOI"), row.get("ISSN"), row.get("ISBN")), row["Link"], row["Year"]) for (index, row) in zip(itertools.count(), reader)]
 
 def ieee(data: io.TextIOWrapper, query_id: str) -> list[Row]:
     reader = csv.DictReader(data)
-    return [Row(query_id, index, row["Document Title"], RowIdent(row.get("DOI"), row.get("ISSN"), row.get("ISBNs")), row["PDF Link"]) for (index, row) in zip(itertools.count(), reader)]
+    return [Row(query_id, index, row["Document Title"], RowIdent(row.get("DOI"), row.get("ISSN"), row.get("ISBNs")), row["PDF Link"], row["Publication Year"]) for (index, row) in zip(itertools.count(), reader)]
 
 def acm_dl(data: io.TextIOWrapper, query_id: str) -> list[Row]:
     reader = bibtexparser.load(data)
-    return [Row(query_id, index, row["title"], RowIdent(row.get("doi"), row.get("issn"), row.get("isbn")), row.get("url")) for (index, row) in zip(itertools.count(), reader.entries)]
+    return [Row(query_id, index, row["title"], RowIdent(row.get("doi"), row.get("issn"), row.get("isbn")), row.get("url"), row["year"]) for (index, row) in zip(itertools.count(), reader.entries)]
 
 def web_of_science(data: io.TextIOWrapper, query_id: str) -> list[Row]:
     reader = csv.DictReader(data, dialect="excel-tab")
-    return [Row(query_id, index, BeautifulSoup(row["TI"]).get_text(), RowIdent(row.get("DI"), row.get("SN"), row.get("BN")), f"https://www.webofscience.com/wos/woscc/full-record/{row["UT"]}") for (index, row) in zip(itertools.count(), reader)]
+    return [Row(query_id, index, BeautifulSoup(row["TI"]).get_text(), RowIdent(row.get("DI"), row.get("SN"), row.get("BN")), f"https://www.webofscience.com/wos/woscc/full-record/{row["UT"]}", row["PY"]) for (index, row) in zip(itertools.count(), reader)]
 
 def main(args: list[str]):
     # list of databases from most to least specific (for dedupe)
