@@ -51,7 +51,7 @@ class RowIdent:
 
 @dataclass
 class Row:
-    CSV_FIELDNAMES = ("EntryID", "ID", "Title", "URL", "YEAR")
+    CSV_FIELDNAMES = ("EntryID", "ID", "Title", "URL", "Year")
     CANONTITLE_REMOVECHARS = re.compile("[^a-zA-Z0-9]")
 
     query_id: str
