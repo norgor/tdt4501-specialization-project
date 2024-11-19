@@ -1,0 +1,3 @@
+beautifulsoup4>=4
+scholarly>=1
+tqdm==4.67.0
