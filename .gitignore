@@ -1,1 +1,4 @@
-queries/
+/queries
+/.venv
+/coalpaper.csv
+/.cache.scholar
