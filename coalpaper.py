@@ -120,7 +120,7 @@ class Row:
 					self.title,
 					self.url,
 					self.year,
-					self.info.num_citations
+					self.info.num_citations or 0
 				),
 			)
 		)
@@ -201,7 +201,7 @@ def web_of_science(data: io.TextIOWrapper, query_id: str) -> list[Row]:
 
 def main(args: list[str]):
 	#pg = ProxyGenerator()
-	#pg.FreeProxies(timeout=10, wait_time=1200)
+	#pg.FreeProxies()
 	#scholarly.use_proxy(pg)
 
 	# list of databases from most to least specific (for dedupe)
