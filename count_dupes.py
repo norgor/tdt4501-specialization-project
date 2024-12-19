@@ -7,7 +7,7 @@ import os
 import sys
 import glob
 from row import row_filter
-from database_parsing import dbs
+from database_parsing import DBS
 
 
 def main(args: list[str]):
@@ -15,7 +15,7 @@ def main(args: list[str]):
     n_hits = 0
     n_duplicates = 0
 
-    for prefix, func in dbs:
+    for prefix, func in DBS:
         for name in sorted(glob.glob(f"queries/{prefix}_*")):
             query_id = os.path.splitext(os.path.split(name)[1])[0]
             with open(name, "r") as f:

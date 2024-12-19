@@ -67,7 +67,7 @@ def web_of_science(data: io.TextIOWrapper, query_id: str) -> list[Row]:
 
 
 # list of databases from most to least specific (for dedupe)
-dbs = (
+DBS = (
     ("IEEE", ieee),
     ("SCP", scopus),
     ("WOS", web_of_science),

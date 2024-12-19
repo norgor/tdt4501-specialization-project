@@ -9,14 +9,14 @@ import glob
 import csv
 from tqdm import tqdm
 from row import Row, row_filter
-from database_parsing import dbs
+from database_parsing import DBS
 
 
 def main(args: list[str]):
     rows = []
     n_duplicates = 0
 
-    for prefix, func in dbs:
+    for prefix, func in DBS:
         for name in sorted(glob.glob(f"queries/{prefix}_*")):
             query_id = os.path.splitext(os.path.split(name)[1])[0]
             print(f"Processing {name}...")
